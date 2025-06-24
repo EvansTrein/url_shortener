@@ -1,0 +1,51 @@
+# docker compose --env-file ./backend/local.env up -d
+
+services:
+  postgres:
+    container_name: shortner_postgres
+    image: postgres:17.5-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    command: >
+      postgres 
+      -p ${POSTGRES_PORT}
+    volumes:
+      - shortner_vol:/data
+    networks:
+      - shortner_network
+  
+  # backend:
+  #   container_name: _backend
+  #   build:
+  #     context: ./backend/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - mongodb
+  #   networks:
+  #     - shortner-network
+  #   environment:
+  
+  # frontend:
+  #   container_name: _frontend
+  #   build:
+  #     context: ./frontend/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5173:3000"
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - shortner-network
+  #   environment:
+  #     BASE_URL: http://backend:3000
+
+volumes:
+  shortner_vol: {}
+
+networks:
+  shortner_network:

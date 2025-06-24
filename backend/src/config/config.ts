@@ -4,6 +4,7 @@ dotenv.config({ path: 'local.env' });
 interface IConfig {
   ENV: string | undefined;
   API_PORT: string | undefined;
+  DOMAIN: string | undefined;
   POSTGRES_PATH: string | undefined;
   CLIENT_ORIGINS: string | undefined;
 
@@ -17,6 +18,7 @@ interface IConfig {
 export const config: IConfig = {
   ENV: process.env.ENV,
   API_PORT: process.env.API_PORT,
+  DOMAIN: process.env.DOMAIN,
   POSTGRES_PATH: process.env.POSTGRES_PATH,
   CLIENT_ORIGINS: process.env.CLIENT_ORIGINS,
 

@@ -1,5 +1,7 @@
-import { ERROR_RESOURCE_NOT_FOUND } from '@/errors';
+import { generateRandomStr } from '@/utils/utils';
 import { ShortnerRepo } from '@repo/shortner';
+import { config } from '@config/config';
+import { UrlShort } from '@/entities/urlShort';
 
 export class ShortnerService {
   private readonly repo: ShortnerRepo;
@@ -8,7 +10,14 @@ export class ShortnerService {
     this.repo = repo;
   }
 
-	public async getOriginalUrl(url: string) {
-		throw ERROR_RESOURCE_NOT_FOUND
-	}
+  public async shorten(originalUrl: string, expiresAt: Date | undefined): Promise<UrlShort> {
+    const shortUrl = `${config.DOMAIN}/${generateRandomStr(10)}`;
+    if (expiresAt === undefined) {
+      const now = new Date();
+      now.setHours(now.getDay() + 1);
+      expiresAt = now;
+    }
+
+    return await this.repo.create({ originalUrl: originalUrl, shortUrl: shortUrl, expiresAt: expiresAt });
+  }
 }

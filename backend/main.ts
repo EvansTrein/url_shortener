@@ -13,7 +13,7 @@ const gracefulShutdown = async () => {
     logger.info('Shutdown complete', { module: 'main' });
     process.exit(0);
   } catch (error) {
-    logger.error('Error during shutdown', { error: error }, { module: 'main' });
+    logger.error(`Error during shutdown, error - ${error}`, { module: 'main' });
     process.exit(1);
   }
 };

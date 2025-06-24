@@ -58,8 +58,8 @@ export class App {
     const rateController = new ShortnerController(rateService);
     const analyticController = new AnalyticController(analyticService);
 
-    expressInst.use('/api', initRouterShortner(rateController));
-    expressInst.use('/api', initRouterAnalytic(analyticController));
+    expressInst.use(initRouterShortner(rateController));
+    expressInst.use(initRouterAnalytic(analyticController));
 
     expressInst.use(errorMiddleware);
   }
@@ -89,7 +89,7 @@ export class App {
         logger.info('Postgres connection closed', { module: 'app' });
       })
       .catch((error) => {
-        logger.info('Error postgres connection error', { error: error }, { module: 'app' });
+        logger.info(`Error postgres connection error - ${error}`, { module: 'app' });
         throw error;
       });
   }

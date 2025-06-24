@@ -1,5 +1,5 @@
 import { logger } from '@/logger';
-import { ShortnerService } from '@/services/shortner';
+import { ShortnerService } from '@services/shortner';
 import { Request, Response, NextFunction } from 'express';
 
 export class ShortnerController {
@@ -24,4 +24,8 @@ export class ShortnerController {
       next(error);
     }
   }
+
+  public async info(req: Request, res: Response, next: NextFunction): Promise<void> {}
+
+  public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {}
 }

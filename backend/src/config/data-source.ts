@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { config } from '@config/config';
-import { UrlShort } from '@/entities/urlShort';
+import { UrlShort } from '@entities/urlShort';
+import { Analytic } from '@entities/analytic';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
   database: config.POSTGRES_NAME,
   synchronize: true,
   logging: true,
-  entities: [UrlShort],
+  entities: [UrlShort, Analytic],
   subscribers: [],
   migrations: [],
 });

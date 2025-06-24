@@ -2,14 +2,17 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import http from 'http';
-import { Request, Response, NextFunction } from 'express';
-import { ShortnerController } from '@/controllers/shortner';
-import { errorMiddleware } from '@controllers/middlewares';
-import { initRouterShortner } from '@/routes/shortner';
 import { logger } from './logger';
-import { ShortnerRepo } from '@/repositories/shortner';
-import { ShortnerService } from '@/services/shortner';
 import { config } from '@config/config';
+import { ShortnerController } from '@controllers/shortner';
+import { AnalyticController } from '@controllers/analytic';
+import { errorMiddleware } from '@controllers/middlewares';
+import { initRouterShortner } from '@routes/shortner';
+import { initRouterAnalytic } from './routes/analytic';
+import { ShortnerRepo } from '@repo/shortner';
+import { AnalyticRepo } from '@repo/analytic';
+import { ShortnerService } from '@services/shortner';
+import { AnalyticService } from '@services/analytic';
 import { AppDataSource } from '@config/data-source';
 
 export class App {
@@ -47,15 +50,18 @@ export class App {
     expressInst.use(express.urlencoded({ extended: true }));
 
     const shortnerRepo = new ShortnerRepo();
+    const analyticRepo = new AnalyticRepo();
 
     const rateService = new ShortnerService(shortnerRepo);
+    const analyticService = new AnalyticService(analyticRepo);
+
     const rateController = new ShortnerController(rateService);
+    const analyticController = new AnalyticController(analyticService);
 
     expressInst.use('/api', initRouterShortner(rateController));
+    expressInst.use('/api', initRouterAnalytic(analyticController));
 
-    expressInst.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-      errorMiddleware(err, req, res, next);
-    });
+    expressInst.use(errorMiddleware);
   }
 
   public async start(port: string): Promise<void> {

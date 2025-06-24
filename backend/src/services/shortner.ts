@@ -1,5 +1,5 @@
 import { ERROR_RESOURCE_NOT_FOUND } from '@/errors';
-import { ShortnerRepo } from '@/repositories/shortner';
+import { ShortnerRepo } from '@repo/shortner';
 
 export class ShortnerService {
   private readonly repo: ShortnerRepo;

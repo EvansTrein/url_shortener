@@ -10,3 +10,4 @@ export class AppError extends Error {
 export const ERROR_RESOURCE_NOT_FOUND = new AppError('Resource not found', 404);
 export const ERROR_INVALID_ORIGINAL_URL = new AppError('Missing or invalid original URL', 400);
 export const ERROR_INVALID_EXPIRES_AT = new AppError('Invalid or past date for expiresAt', 400);
+export const ERROR_URL_EXPIRED = new AppError('Short URL has expired', 410);

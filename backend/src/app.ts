@@ -2,13 +2,13 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import http from 'http';
-import { logger } from './logger';
+import { logger } from '@/logger';
 import { config } from '@config/config';
 import { ShortnerController } from '@controllers/shortner';
 import { AnalyticController } from '@controllers/analytic';
 import { errorMiddleware } from '@controllers/middlewares';
 import { initRouterShortner } from '@routes/shortner';
-import { initRouterAnalytic } from './routes/analytic';
+import { initRouterAnalytic } from '@routes/analytic';
 import { ShortnerRepo } from '@repo/shortner';
 import { AnalyticRepo } from '@repo/analytic';
 import { ShortnerService } from '@services/shortner';
@@ -24,16 +24,16 @@ export class App {
 
     AppDataSource.initialize()
       .then(() => {
-        logger.info('Successful connection to database', { module: 'config' });
+        logger.info('Successful connection to database', { module: 'app' });
       })
       .catch((error) => {
-        logger.error(`Failed to connect to database - error: ${error}`, { module: 'config' });
+        logger.error(`Failed to connect to database - error: ${error}`, { module: 'app' });
         throw error;
       });
 
     expressInst.use(
       cors({
-        origin: config.CLIENT_ORIGINS,
+        origin: process.env.CLIENT_ORIGINS ? process.env.CLIENT_ORIGINS.split(',') : ['http://localhost:5173'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
       })
@@ -55,7 +55,7 @@ export class App {
     const rateService = new ShortnerService(shortnerRepo);
     const analyticService = new AnalyticService(analyticRepo);
 
-    const rateController = new ShortnerController(rateService);
+    const rateController = new ShortnerController(rateService, analyticService);
     const analyticController = new AnalyticController(analyticService);
 
     expressInst.use(initRouterShortner(rateController));

@@ -1,14 +1,17 @@
 import { ERROR_INVALID_ORIGINAL_URL, ERROR_INVALID_EXPIRES_AT } from '@/errors';
 import { logger } from '@/logger';
-import { isValidUrl } from '@/utils/utils';
+import { AnalyticService } from '@services/analytic';
 import { ShortnerService } from '@services/shortner';
+import { isValidUrl } from '@/utils/utils';
 import { Request, Response, NextFunction } from 'express';
 
 export class ShortnerController {
   private readonly service: ShortnerService;
+  private readonly analytic: AnalyticService;
 
-  constructor(service: ShortnerService) {
+  constructor(service: ShortnerService, analytic: AnalyticService) {
     this.service = service;
+    this.analytic = analytic;
   }
 
   public async shorten(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -41,7 +44,8 @@ export class ShortnerController {
 
       const result = await this.service.shorten(originalUrl, parsedExpiresAt);
 
-      res.status(201).json({ shortUrl: result.shortUrl });
+      res.status(201).json({ shortUrl: result });
+      logger.info('Created successfully', { module: 'controller' });
     } catch (error) {
       next(error);
     }
@@ -52,16 +56,44 @@ export class ShortnerController {
     try {
       logger.debug(`Redirect request for short URL: ${shortUrl}`, { module: 'controller' });
 
-      // const originalUrl = await this.service.getOriginalUrl(shortUrl);
+      const originalUrl = await this.service.redirect(shortUrl);
 
-      // res.redirect(originalUrl);
+      res.redirect(302, originalUrl);
+      logger.info('Redirect successfully', { module: 'controller' });
+    } catch (error) {
+      logger.warn(`Failed redirect - ${error}`, { module: 'controller' });
+      next(error);
+      return;
+    }
+
+    const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip?.replace('::ffff:', '');
+    if (!ip) {
+      logger.warn('Failed to get IP, the transition will not be saved to analytics', { module: 'controller' });
+      return;
+    }
+
+    try {
+      await this.analytic.create(shortUrl, ip);
+      logger.info('Successfully saved to analytics', { module: 'controller' });
+    } catch (error) {
+      logger.warn(`Failed saved to analytics - ${error}`, { module: 'controller' });
+    }
+  }
+
+  public async info(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { shortUrl } = req.params;
+    try {
+      const url = await this.service.info(shortUrl);
+
+      res.status(200).json(url);
+      logger.info('Info about url successfully', { module: 'controller' });
     } catch (error) {
       logger.warn(`Failed redirect - ${error}`, { module: 'controller' });
       next(error);
     }
   }
 
-  public async info(req: Request, res: Response, next: NextFunction): Promise<void> {}
-
-  public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {}
+  public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { shortUrl } = req.params;
+  }
 }

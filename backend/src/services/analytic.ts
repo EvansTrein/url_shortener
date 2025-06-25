@@ -7,5 +7,7 @@ export class AnalyticService {
     this.repo = repo;
   }
 
-	
+	public async create(urlShort: string, ip: string): Promise<void> {
+		await this.repo.create(urlShort, ip)
+	}
 }

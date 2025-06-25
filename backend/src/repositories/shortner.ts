@@ -1,4 +1,3 @@
-import { logger } from '@/logger';
 import { Repository } from 'typeorm';
 import { UrlShort } from '@entities/urlShort';
 import { AppDataSource } from '@config/data-source';
@@ -11,20 +10,23 @@ export class ShortnerRepo {
   }
 
   public async create(data: { originalUrl: string; shortUrl: string; expiresAt: Date }): Promise<UrlShort> {
-    try {
-      const urlShort = this.repo.create({
-        originalUrl: data.originalUrl,
-        shortUrl: data.shortUrl,
-        expiresAt: data.expiresAt,
-      });
+    const urlShort = this.repo.create({
+      originalUrl: data.originalUrl,
+      shortUrl: data.shortUrl,
+      expiresAt: data.expiresAt,
+    });
 
-      const savedUrl = await this.repo.save(urlShort);
+    return await this.repo.save(urlShort);
+  }
 
-      logger.info(`Created successfully: ${data.shortUrl}`, { module: 'repositories' });
-      return savedUrl;
-    } catch (error) {
-      logger.error('Failed to create short URL - error: %o', error, { module: 'repositories' });
-      throw error;
+  public async findUrl(shortUrl: string): Promise<UrlShort | null> {
+    const url = await this.repo.findOneBy({ shortUrl });
+
+    if (url) {
+      url.clickCount++;
+      await this.repo.save(url);
     }
+
+    return url;
   }
 }

@@ -1,15 +1,24 @@
-import { Entity, Column, PrimaryColumn, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, Index } from 'typeorm';
 
 interface IAnalytic {
+  id: number;
   urlShort: string;
-  listIP: string[];
+  ipAddr: string;
+  eventDate: Date;
 }
 
 @Entity()
 export class Analytic extends BaseEntity implements IAnalytic {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+	@Index()
+  @Column({ nullable: false })
   urlShort!: string;
 
-  @Column('json', { default: '[]' })
-  listIP!: string[];
+  @Column({ nullable: false })
+  ipAddr!: string;
+
+  @Column('date', { default: () => 'CURRENT_DATE' })
+  eventDate!: Date;
 }

@@ -4,6 +4,6 @@
   "roots": ["<rootDir>/tests"],
   "moduleFileExtensions": ["ts", "js", "json"],
   "testMatch": ["**/tests/**/*.test.ts"],
-  "collectCoverage": true,
+  "collectCoverage": false,
   "coverageDirectory": "./coverage"
 }

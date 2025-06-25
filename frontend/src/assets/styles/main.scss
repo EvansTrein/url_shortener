@@ -11,12 +11,12 @@
   --border-radius-m: 8px;
   --border-radius-l: 12px;
   --border-radius-xl: 20px;
-  --primary-color: rgb(3, 87, 165);
-  --primary-dark-color: rgb(3, 37, 116);
+  --primary-color: rgb(138, 138, 138);
+  --primary-dark-color: rgb(31, 49, 107);
 }
 
 body {
-	background-color: #000;
+	background-image: radial-gradient(circle, #1e3c72 10%, #5b6d8e 90%);
   font-size: var(--base-font-size);
   color: #fff;
 }

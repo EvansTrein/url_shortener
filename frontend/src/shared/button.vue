@@ -20,7 +20,7 @@ defineProps<{
   text-overflow: ellipsis;
   display: inline-block;
 	padding: 2px 2px;
-  width: 80px;
+  width: 100px;
 	font-weight: bold;
 }
 
@@ -28,6 +28,7 @@ defineProps<{
   button:hover {
     background-color: var(--primary-dark-color);
     color: black;
+		border: 2px solid white;
   }
 }
 </style>

@@ -3,7 +3,6 @@ import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import http from 'http';
 import { logger } from '@/logger';
-import { config } from '@config/config';
 import { ShortnerController } from '@controllers/shortner';
 import { AnalyticController } from '@controllers/analytic';
 import { errorMiddleware } from '@controllers/middlewares';

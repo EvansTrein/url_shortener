@@ -1,0 +1,51 @@
+@use './vars.scss';
+
+@mixin debug {
+  outline: 4px dashed rgb(190, 12, 12);
+  background-color: rgb(95, 85, 52);
+}
+
+@mixin debug1 {
+  outline: 4px dashed rgb(5, 41, 160);
+  background-color: rgb(19, 148, 98);
+}
+
+@mixin center80w {
+  width: 80%;
+  margin: 0 auto;
+
+  @media (max-width: vars.$wideBrp) {
+    width: 85%;
+  }
+
+  @media (max-width: vars.$largeBrp) {
+    width: 90%;
+  }
+
+  @media (max-width: vars.$xxlBrp) {
+    width: 92%;
+  }
+
+  @media (max-width: vars.$xlBrp) {
+    width: 95%;
+    padding: 1rem 1rem;
+  }
+
+  @media (max-width: vars.$mdBrp) {
+    width: 100%;
+    padding: 1rem 1rem;
+  }
+}
+
+@mixin hide($breakpoint) {
+  @media (max-width: ($breakpoint - 1)) {
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    position: absolute;
+    overflow: hidden;
+  }
+}

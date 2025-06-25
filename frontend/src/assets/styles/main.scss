@@ -1,0 +1,40 @@
+@use './_reset.scss';
+@use './vars.scss';
+
+
+:root {
+  --base-font-size: 16px;
+  --transition-fast: 0.4s;
+  --transition-medium: 0.6s;
+  --transition-slow: 0.8s;
+  --border-radius-s: 4px;
+  --border-radius-m: 8px;
+  --border-radius-l: 12px;
+  --border-radius-xl: 20px;
+  --primary-color: rgb(3, 87, 165);
+  --primary-dark-color: rgb(3, 37, 116);
+}
+
+body {
+	background-color: #000;
+  font-size: var(--base-font-size);
+  color: #fff;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0);
+  border-radius: 10px;
+}

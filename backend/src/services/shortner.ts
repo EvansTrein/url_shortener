@@ -49,4 +49,12 @@ export class ShortnerService {
 
     return result;
   }
+
+  public async delete(shortUrl: string): Promise<void> {
+    const result = await this.repo.remove(shortUrl);
+
+    if (!result) {
+      throw ERROR_RESOURCE_NOT_FOUND;
+    }
+  }
 }

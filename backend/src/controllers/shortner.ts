@@ -95,5 +95,14 @@ export class ShortnerController {
 
   public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { shortUrl } = req.params;
+
+    try {
+      await this.service.delete(shortUrl);
+      res.sendStatus(204);
+      logger.info('Deleted successfully', { module: 'controller' });
+    } catch (error) {
+      logger.warn(`Failed deleted - ${error}`, { module: 'controller' });
+      next(error);
+    }
   }
 }

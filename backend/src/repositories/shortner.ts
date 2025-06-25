@@ -29,4 +29,12 @@ export class ShortnerRepo {
 
     return url;
   }
+
+  public async remove(shortUrl: string): Promise<boolean> {
+    const result = await this.repo.delete({ shortUrl });
+
+    if (result.affected === null || result.affected === undefined) return false;
+
+    return result.affected > 0;
+  }
 }

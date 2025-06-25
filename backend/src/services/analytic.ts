@@ -7,7 +7,11 @@ export class AnalyticService {
     this.repo = repo;
   }
 
-	public async create(urlShort: string, ip: string): Promise<void> {
-		await this.repo.create(urlShort, ip)
-	}
+  public async create(urlShort: string, ip: string): Promise<void> {
+    await this.repo.create(urlShort, ip);
+  }
+
+  public async analytic(urlShort: string): Promise<{ totalClicks: number; lastIps: string[] }> {
+    return await this.repo.analytic(urlShort);
+  }
 }

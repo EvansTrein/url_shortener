@@ -2,7 +2,7 @@
 
 services:
   postgres:
-    container_name: shortner_postgres
+    container_name: shortener_postgres
     image: postgres:17.5-alpine
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -15,37 +15,41 @@ services:
     volumes:
       - shortner_vol:/data
     networks:
-      - shortner_network
+      - shortener_network
   
-  # backend:
-  #   container_name: _backend
-  #   build:
-  #     context: ./backend/
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - mongodb
-  #   networks:
-  #     - shortner-network
-  #   environment:
+  backend:
+    container_name: shortener_backend
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - shortener_network
+    environment:
+      - POSTGRES_USER=evans
+      - POSTGRES_PASSWORD=evans
+      - POSTGRES_PORT=3005
+      - POSTGRES_HOST=postgres
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USE_SSL=disable
   
-  # frontend:
-  #   container_name: _frontend
-  #   build:
-  #     context: ./frontend/
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5173:3000"
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - shortner-network
-  #   environment:
-  #     BASE_URL: http://backend:3000
+  frontend:
+    container_name: shortener_frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    ports:
+      - "5173:3000"
+    depends_on:
+      - backend
+    networks:
+      - shortener_network
 
 volumes:
   shortner_vol: {}
 
 networks:
-  shortner_network:
+  shortener_network:

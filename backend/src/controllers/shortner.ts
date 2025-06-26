@@ -58,7 +58,8 @@ export class ShortnerController {
 
       const originalUrl = await this.service.redirect(shortUrl);
 
-      res.redirect(302, originalUrl);
+      // res.redirect(302, originalUrl);
+			res.status(200).json({ originalUrl: originalUrl });
       logger.info('Redirect successfully', { module: 'controller' });
     } catch (error) {
       logger.warn(`Failed redirect - ${error}`, { module: 'controller' });

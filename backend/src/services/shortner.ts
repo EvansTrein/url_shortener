@@ -16,7 +16,7 @@ export class ShortnerService {
 
     if (expiresAt === undefined) {
       const now = new Date();
-      now.setHours(now.getDay() + 1);
+      now.setHours(now.getHours() + 24);
       // now.setSeconds(now.getSeconds() + 10);
       expiresAt = now;
     }

@@ -14,6 +14,7 @@ export class AnalyticController {
     try {
       const result = await this.service.analytic(shortUrl);
 
+			console.log('1111111111', result)
       res.status(200).json(result);
       logger.info('Analytic successfully', { module: 'controller' });
     } catch (error) {

@@ -13,6 +13,7 @@
     "baseUrl": ".",
 		"emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+		"types": ["jest"],
     "paths": {
       "@/*": ["src/*"],
       "@config/*": ["src/config/*"],
